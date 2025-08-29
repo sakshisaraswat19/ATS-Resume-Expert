@@ -80,103 +80,61 @@ prompt3 = PromptTemplate(
 )
 
 
-import streamlit as st
-import time
+# Streamlit Page Config 
+st.set_page_config(page_title="ATS Resume Expert", page_icon="📄", layout="wide")
 
 
-# Placeholder functions -
-def load_document(uploaded_file):
-    """Placeholder function - replace with your actual PDF loading function"""
-    return f"Content of {uploaded_file.name}"
-
-# Placeholder prompt and model objects - 
-class PlaceholderPrompt:
-    def __or__(self, other):
-        return PlaceholderChain()
-
-class PlaceholderModel:
-    def __or__(self, other):
-        return PlaceholderChain()
-
-class PlaceholderParser:
-    pass
-
-class PlaceholderChain:
-    def __or__(self, other):
-        return self
-    
-    def invoke(self, inputs):
-        # Placeholder response - 
-        if 'descr' in inputs:
-            return f"Analysis based on resume: {inputs['resume'][:50]}... and job description: {inputs['descr'][:50]}..."
-        else:
-            return f"Resume analysis: {inputs['resume'][:100]}..."
-
-prompt1 = PlaceholderPrompt()
-prompt2 = PlaceholderPrompt()
-prompt3 = PlaceholderPrompt()
-model = PlaceholderModel()
-parser = PlaceholderParser()
-
-# Configure page 
-st.set_page_config(
-    page_title="ATS Resume Expert", 
-    page_icon="📄",
-    layout="wide"
-)
-
-# CSS
+# Custom CSS styling
 st.markdown("""
 <style>
-    .main-header {
-        text-align: center;
-        color: #2E86AB;
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-    }
-    .sub-header {
-        text-align: center;
-        color: #666;
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
-    }
-    .upload-section {
-        background-color: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 10px;
-        border: 2px dashed #dee2e6;
-        margin: 1rem 0;
-    }
-    .stButton > button {
-        width: 100%;
-        background-color: #2E86AB;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 0.75rem 1rem;
-        font-weight: 500;
-        transition: background-color 0.3s;
-    }
-    .stButton > button:hover {
-        background-color: #1e5f7a;
-    }
-    .result-container {
-        background-color: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 10px;
-        border-left: 4px solid #2E86AB;
-        margin: 1rem 0;
-    }
+.main-header {
+    text-align: center;
+    color: #2E86AB;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+.sub-header {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+.upload-section {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 2px dashed #dee2e6;
+    margin: 1rem 0;
+}
+.stButton > button {
+    width: 100%;
+    background-color: #2E86AB;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+.stButton > button:hover {
+    background-color: #1e5f7a;
+}
+.result-container {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 4px solid #2E86AB;
+    margin: 1rem 0;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# Main header
-st.markdown('<h1 class="main-header"> ATS Resume Expert</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">ATS Resume Expert</h1>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Optimize your resume for Applicant Tracking Systems</p>', unsafe_allow_html=True)
 
-
-col1, col2 = st.columns([1, 1])
+# Input Sections
+col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("📋 Job Description")
@@ -195,62 +153,51 @@ with col2:
         help="Please upload a PDF file of your resume for analysis"
     )
 
-
+# Analysis Buttons
 st.markdown("---")
 st.subheader("Analysis Options")
 
-# columns for buttons
 btn_col1, btn_col2, btn_col3 = st.columns(3)
 
 with btn_col1:
     submit1 = st.button("📊 Analyze Resume", help="Get detailed analysis of your resume")
-
 with btn_col2:
     submit2 = st.button("🎯 Match Percentage", help="Calculate compatibility with job description")
-
 with btn_col3:
     submit3 = st.button("💡 Improvement Tips", help="Get suggestions to enhance your resume")
 
-# Results section
+# Results Section
 if submit1 or submit2 or submit3:
-    st.markdown("---")
-    
     if uploaded_file is not None:
-        with st.spinner("Analyzing your resume..."):
-            # Simulate processing time
-            time.sleep(1)
-            pdf_content = load_document(uploaded_file)
-            
-            if submit1:
-                response = prompt1 | model | parser
-                st.subheader("📊 Resume Analysis Results")
-                st.markdown('<div class="result-container">', unsafe_allow_html=True)
-                st.write(response.invoke({'resume': pdf_content}))
-                st.markdown('</div>', unsafe_allow_html=True)
-            
-            elif submit2:
-                if input_text.strip():
-                    response = prompt2 | model | parser
-                    st.subheader("🎯 Compatibility Score")
-                    st.markdown('<div class="result-container">', unsafe_allow_html=True)
-                    st.write(response.invoke({'resume': pdf_content, 'descr': input_text}))
-                    st.markdown('</div>', unsafe_allow_html=True)
-                else:
-                    st.warning("⚠️ Please provide a job description for percentage matching.")
-            
-            elif submit3:
-                if input_text.strip():
-                    response = prompt3 | model | parser
-                    st.subheader("💡 Resume Improvement Suggestions")
-                    st.markdown('<div class="result-container">', unsafe_allow_html=True)
-                    st.write(response.invoke({'resume': pdf_content, 'descr': input_text}))
-                    st.markdown('</div>', unsafe_allow_html=True)
-                else:
-                    st.warning("⚠️ Please provide a job description for improvement suggestions.")
-    else:
-        st.error("❌ Please upload your resume to proceed with the analysis.")
+        pdf_content = load_document(uploaded_file)
 
-# Sidebar 
+        if submit1:
+            response = prompt1 | model | parser
+            st.subheader("Resume Analysis Results")
+            # st.markdown('<div class="result-container">', unsafe_allow_html=True)
+            st.write(response.invoke({'resume': pdf_content}))
+            # st.markdown('</div>', unsafe_allow_html=True)
+
+        elif submit2:
+            if input_text.strip():
+                response = prompt2 | model | parser
+                st.subheader(" Compatibility Score")
+                # st.markdown('<div class="result-container">', unsafe_allow_html=True)
+                st.write(response.invoke({'resume': pdf_content, 'descr': input_text}))
+                # st.markdown('</div>', unsafe_allow_html=True)
+            else:
+                st.warning("⚠️ Please provide a job description for percentage matching.")
+
+        elif submit3:
+            if input_text.strip():
+                response = prompt3 | model | parser
+                st.subheader("Resume Improvement Suggestions")
+                st.write(response.invoke({'resume': pdf_content, 'descr': input_text}))
+            else: st.warning("⚠️ Please provide a job description for improvement suggestions.")
+
+        else: st.error("❌ Please upload your resume to proceed with the analysis.")
+
+# Sidebar
 st.sidebar.markdown("## ℹ️ About ATS Resume Expert")
 st.sidebar.markdown("""
 This tool helps you optimize your resume for Applicant Tracking Systems (ATS) by:
@@ -266,5 +213,5 @@ This tool helps you optimize your resume for Applicant Tracking Systems (ATS) by
 - Keep your resume ATS-friendly
 """)
 
-# Footer
+
 st.markdown("---")
