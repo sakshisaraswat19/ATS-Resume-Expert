@@ -84,7 +84,7 @@ prompt3 = PromptTemplate(
 st.set_page_config(page_title="ATS Resume Expert", page_icon="📄", layout="wide")
 
 
-# Custom CSS styling
+# CSS
 st.markdown("""
 <style>
 .main-header {
@@ -215,3 +215,4 @@ This tool helps you optimize your resume for Applicant Tracking Systems (ATS) by
 
 
 st.markdown("---")
+
